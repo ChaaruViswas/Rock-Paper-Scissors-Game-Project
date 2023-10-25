@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        p {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .score {
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #0074d9;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ROCK, PAPER, SCISSORS game using JavaScript, HTML, and CSS by Chaaru Viswas S</h1>
+        <p>Choose any one either rock, paper, or scissors</p>
+        <p style="font-size: 20px;"><strong>Note:</strong> "Rock wins against scissors, scissors win against paper, paper wins against rock."</p>
+
+        <label for="target">Target Score:</label>
+        <input type="number" id="target" value="5">
+        <button id="set-target">Set Target</button>
+
+        <div class="score">
+            <div>You: [0]</div>
+            <div>Computer: [0]</div>
+        </div>
+        <div class="message"></div>
+        <div class="buttons">
+            <button type="button" id="rock">Rock</button>
+            <button type="button" id="paper">Paper</button>
+            <button type="button" id="scissors">Scissors</button>
+        </div>
+    </div>
+
+    <script>
+        const message = document.querySelector('.message');
+        const score = document.querySelector('.score');
+        const buttons = document.querySelectorAll('button');
+        const winnerScores = [0, 0];
+        let targetScore = 5; // Default target score
+
+        const setTargetButton = document.getElementById('set-target');
+        const targetInput = document.getElementById('target');
+
+        setTargetButton.addEventListener('click', () => {
+            targetScore = parseInt(targetInput.value);
+            score.innerHTML = 'You: [0] Computer: [0]';
+        });
+
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener('click', playGame);
+        }
+
+        function playGame(e) {
+            if (winnerScores[0] >= targetScore || winnerScores[1] >= targetScore) {
+                // Display the winner
+                if (winnerScores[0] >= targetScore) {
+                    messenger('You reached the target score! You win the game!');
+                } else {
+                    messenger('Computer reached the target score! Computer wins the game!');
+                }
+                return;
+            }
+
+            let playerSelection = e.target.innerText;
+            let computerSelection = Math.random();
+            if (computerSelection < 0.34) {
+                computerSelection = 'Rock';
+            } else if (computerSelection <= 0.67) {
+                computerSelection = 'Paper';
+            } else {
+                computerSelection = 'Scissors';
+            }
+            let result = checkWinner(playerSelection, computerSelection);
+            if (result === 'You') {
+                result += ' won!';
+                winnerScores[0]++;
+            }
+
+            if (result === 'Computer') {
+                result += ' wins!';
+                winnerScores[1]++;
+            }
+
+            if (result === 'Draw') {
+                result += '. It\'s a tie!';
+            }
+            score.innerHTML = 'You: [' + winnerScores[0] + '] Computer: [' + winnerScores[1] + ']';
+            messenger('You: <strong>' + playerSelection + '</strong> Computer: <strong>' + computerSelection + '</strong><br>' + result);
+        }
+
+        function messenger(selectionMessage) {
+            message.innerHTML = selectionMessage;
+        }
+
+        function checkWinner(player, computer) {
+            if (player === computer) {
+                return 'Draw';
+            }
+
+            if (player === 'Rock') {
+                if (computer === 'Paper') {
+                    return 'Computer';
+                } else {
+                    return 'You';
+                }
+            }
+
+            if (player === 'Paper') {
+                if (computer === 'Scissors') {
+                    return 'Computer';
+                } else {
+                    return 'You';
+                }
+            }
+
+            if (player === 'Scissors') {
+                if (computer === 'Rock') {
+                    return 'Computer';
+                } else {
+                    return 'You';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
